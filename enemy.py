@@ -8,11 +8,12 @@ class Enemy:
     def update(self, current_state, neightboors):#Fonction qui décide comment bouger
         (x1, y1) = current_state[self.name] 
         (x2, y2) = current_state["Player"] 
+        """
         n1 = np.sqrt(x1*x1+y1*y1)
         n2 = np.sqrt(x2*x2+y2*y2)
         angle = np.arccos((x1*x2+y1*y2)/(n1*n2)) * 180 / np.pi
         dist = np.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1))
-        
+        """
         #print("Je suis ", self.name, "\n Angle :", angle, "\nDistance :", dist)
         P = np.zeros(4)#Probabilities to go East, South, West, North in that order
         print("Je suis", self.name, self.position,"\n Voici mes voisins", neightboors)
@@ -20,6 +21,11 @@ class Enemy:
             if neightboors[i] == (-1, -1):#obstacle or out of bounds
                 P[i] = 0
             else:
+                (x3, y3) = neightboors[i]
+                n1 = np.sqrt(x3*x3+y3*y3)
+                n2 = np.sqrt(x2*x2+y2*y2)
+                angle = np.arccos((x3*x2+y3*y2)/(n1*n2)) * 180 / np.pi
+                dist = np.sqrt((x2 - x3)*(x2 - x3) + (y2 - y3)*(y2 - y3))
                 P[i] = np.exp(0.33*self.W(angle)*self.T(dist))
 
         print("Je suis ", self.name, "\n P", P)       
