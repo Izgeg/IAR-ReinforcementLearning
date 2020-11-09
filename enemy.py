@@ -22,10 +22,16 @@ class Enemy:
                 P[i] = 0
             else:
                 (x3, y3) = neightboors[i]
-                n1 = np.sqrt(x3*x3+y3*y3)
-                n2 = np.sqrt(x2*x2+y2*y2)
-                angle = np.arccos((x3*x2+y3*y2)/(n1*n2)) * 180 / np.pi
-                dist = np.sqrt((x2 - x3)*(x2 - x3) + (y2 - y3)*(y2 - y3))
+                u = (x3-x1, y3-y1)#vecteur entre la position de l'ennemi et sa position actuelle
+                v = (x2-x1, y2-y1)#vecteur entre l'ennemi et le player
+                uv = u[0]*v[0] + u[1]*u[1]
+                normu = u[0]*u[0] + u[1]*u[1]
+                normv = v[0]*v[0] + v[1]*v[1]
+                if normu == 0 or normv == 0:
+                    angle = 0
+                else:
+                    angle = np.arccos(uv/(normu*normv))
+                dist = abs(x1-x3) + abs(y1-y3)
                 P[i] = np.exp(0.33*self.W(angle)*self.T(dist))
 
         print("Je suis ", self.name, "\n P", P)       

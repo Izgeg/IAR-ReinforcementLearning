@@ -1,6 +1,7 @@
 import sys
 import pygame
 import enemy
+import agent
 import time
 import copy
 #import random
@@ -95,11 +96,6 @@ map_article = [
 ]
 
 current_state = { 
-"Player" : (18, 12),
-"Enemy1" : (1,12),
-#"Enemy2" : (6, 6),
-#"Enemy3" : (6, 12),
-#"Enemy4" : (6, 18),
 "Food1" : (4, 9),
 "Food2" : (4, 19),
 "Food3" : (5, 20),
@@ -116,7 +112,12 @@ current_state = {
 "Food14": (20, 5),
 "Food15": (23, 1),
 "Food16": (23, 22),
-"Food17": (23, 23)
+"Food17": (23, 23),
+"Player" : (18, 12),
+"Enemy1" : (1,12),
+"Enemy2" : (6, 6),
+"Enemy3" : (6, 12),
+"Enemy4" : (6, 18)
 }
 
 
@@ -161,9 +162,11 @@ def neightboors(x,y, blank_map):
 
     return ret
 
-def update_states(current_state, enemies, blank_map):
-    for enemy in enemies:
-        current_state = enemy.update(current_state, neightboors(enemy.position[0], enemy.position[1], blank_map))
+def update_states(current_state, enemies, player, blank_map, compteur):
+    if(compteur%5 != 0):
+        for enemy in enemies:
+            current_state = enemy.update(current_state, neightboors(enemy.position[0], enemy.position[1], blank_map))
+    current_state = player.update(current_state, neightboors(player.position[0], player.position[1], blank_map))
     return current_state
 pygame.init()
 DISPLAY = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
@@ -173,6 +176,7 @@ enemies = []
 for elem in current_state:
     if elem.startswith("E"):
         enemies.append(enemy.Enemy(elem, (current_state[elem][0], current_state[elem][1])))
+player = agent.Agent("Player", (current_state["Player"][0], current_state["Player"][1]))
 
 #print([enemy.toString() for enemy in enemies])
 """for enemy in enemies:
@@ -195,10 +199,11 @@ def update_disp(current_map):
                 (col*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
 
 #User Interface (à ne pas garder normalement)
-
+compteur = 0
 while True:
     
     update_disp(map_fusion(current_state, blank_map))     
     pygame.display.update()
-    current_state = update_states(current_state, enemies, blank_map)
-    time.sleep(0.5)
+    current_state = update_states(current_state, enemies, player, blank_map, compteur)
+    time.sleep(0.01)
+    compteur += 1
