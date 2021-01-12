@@ -16,7 +16,7 @@ class Enemy:
         """
         #print("Je suis ", self.name, "\n Angle :", angle, "\nDistance :", dist)
         P = np.zeros(4)#Probabilities to go East, South, West, North in that order
-        print("Je suis", self.name, self.position,"\n Voici mes voisins", neightboors)
+        #print("Je suis", self.name, self.position,"\n Voici mes voisins", neightboors)
         for i in range(len(neightboors)):
             if neightboors[i] == (-1, -1):#obstacle or out of bounds
                 P[i] = 0
@@ -34,26 +34,26 @@ class Enemy:
                 dist = abs(x1-x3) + abs(y1-y3)
                 P[i] = np.exp(0.33*self.W(angle)*self.T(dist))
 
-        print("Je suis ", self.name, "\n P", P)       
+        #print("Je suis ", self.name, "\n P", P)       
         som = np.sum(P)
         A = P/som
-        print("Je suis ", self.name, "\n A", A)  
+        #print("Je suis ", self.name, "\n A", A)  
         choice = np.random.choice([0, 1, 2, 3], p=A)
-        #print(choice)
+        ##print(choice)
         if choice == 0:#east
-            print("Je vais à l'est")
+            #print("Je vais à l'est")
             self.position = (x1, y1+1)
             current_state[self.name] = (x1, y1+1)
         elif choice == 1:#south
-            print("Je vais au sud")
+            #print("Je vais au sud")
             self.position = (x1+1, y1)
             current_state[self.name] = (x1+1, y1)
         elif choice == 2:#west
-            print("Je vais à l'ouest")
+            #print("Je vais à l'ouest")
             self.position = (x1, y1-1)
             current_state[self.name] = (x1, y1-1)
         elif choice == 3:#north
-            print("Je vais au nord")
+            #print("Je vais au nord")
             self.position = (x1-1, y1)
             current_state[self.name] = (x1-1, y1)
         return current_state

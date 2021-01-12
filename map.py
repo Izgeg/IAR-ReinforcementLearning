@@ -15,15 +15,15 @@ E = 4 #Ennemy
 elems = [O, F, L, P, E]
 #Les Sprites des cases A REMPLACER PAR DES SPRITES
 
-OBSTACLE = pygame.image.load("images/obstacle.png")
+OBSTACLE = pygame.image.load("C://Users//Nadym\Downloads\IAR\IAR-ReinforcementLearning-main\images\obstacle.png")
 
-FOOD = pygame.image.load("images/food.png")
+FOOD = pygame.image.load("C://Users//Nadym\Downloads\IAR\IAR-ReinforcementLearning-main\images//food.png")
 
-LAND = pygame.image.load("images/grass.png")
+LAND = pygame.image.load("C://Users//Nadym\Downloads\IAR\IAR-ReinforcementLearning-main\images//grass.png")
 
-PLAYER = pygame.image.load("images/player.png")
+PLAYER = pygame.image.load("C://Users//Nadym\Downloads\IAR\IAR-ReinforcementLearning-main\images//player.png")
 
-ENNEMY = pygame.image.load("images/vilain.png")
+ENNEMY = pygame.image.load("C://Users//Nadym\Downloads\IAR\IAR-ReinforcementLearning-main\images//vilain.png")
 
 TileColor = {
 O : OBSTACLE,
@@ -95,6 +95,8 @@ map_article = [
 [O, O, O, O, O, O, L, L, L, L, L, L, L, L, L, L, L, L, L, O, O, O, O, O, O]
 ]
 
+#print(map_article)
+
 current_state = { 
 "Food1" : (4, 9),
 "Food2" : (4, 19),
@@ -122,15 +124,8 @@ current_state = {
 
 
 
-"""
-RANDOM MAP
-
-for i in range(MAPWIDTH):
-    map1.append([])
-    for j in range(MAPHEIGHT):
-        map1[i].append(random.choice(elems))
-"""
 def map_fusion(current_state, blank_map):
+    #Fonction qui vise à générer une nouvelle map qui est remplie des nouvelles choses qui sont arrivés pendant ce tour
     map_vide = copy.deepcopy(blank_map)
     for elem in current_state:
         if elem.startswith("F"):
@@ -148,7 +143,7 @@ def neightboors(x,y, blank_map):
     else:
         ret.append((-1,-1))
     if x < 24 and blank_map[x+1][y] != O :
-        ret.append((x,y+1))#south
+        ret.append((x+1,y))#south
     else:
         ret.append((-1, -1))
     if y > 0 and blank_map[x][y-1] != O :
@@ -176,12 +171,12 @@ enemies = []
 for elem in current_state:
     if elem.startswith("E"):
         enemies.append(enemy.Enemy(elem, (current_state[elem][0], current_state[elem][1])))
-player = agent.Agent("Player", (current_state["Player"][0], current_state["Player"][1]))
+player = agent.Agent("Player", (current_state["Player"][0], current_state["Player"][1]), map_article)
 
 #print([enemy.toString() for enemy in enemies])
-"""for enemy in enemies:
-    current_state = enemy.update(current_state, neightboors(enemy.position[0], enemy.position[1]))
-"""
+#for enemy in enemies:
+#    current_state = enemy.update(current_state, neightboors(enemy.position[0], enemy.position[1]))
+
 #print([enemy.toString() for enemy in enemies])
 
 #CREATE DISPLAY (affichage)
@@ -198,7 +193,7 @@ def update_disp(current_map):
                 TileColor[current_map[row][col]],
                 (col*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
 
-#User Interface (à ne pas garder normalement)
+#La plupart des trucs ici sont à commenter pour pour l'entrainement
 compteur = 0
 while True:
     
